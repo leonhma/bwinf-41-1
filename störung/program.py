@@ -11,14 +11,17 @@ def r_path(path_: str) -> str:
     )
 
 
-# laden des buchs als wörter-array
-words_in_book: List[str]
+# die zeilen-wörter matrix
+lines_words: List[List[str]]
 
 with open(r_path('beispieldaten/Alice_im_Wunderland.txt'), 'r') as f:
-    words_in_book = list(map(lambda x: x[0].lower(), findall('(\\w+?)(\\W|$)', f.read())))
+    lines_words = list(map(
+        lambda x: list(map(lambda y: y.lower(),
+                           findall('(\\w+?)(?:\\W|$)', x))),
+        f.read().split('\n')))
 
 
-# hauptprogramm; worstcase O(n*k)
+# hauptprogramm
 def main():
     print()
     bsp_nr = int(input('Bitte die Nummer des Beispiels eingeben [0; 5]: '))
@@ -35,26 +38,37 @@ def main():
         sentence = text.split()
     print()
 
-    # iterieren über das wörterarray und vergleichen mit dem beispielsatz
+    # iterieren über das wörterarray und aufbauen eines treffers
     results: List[str] = []
-    for left in range(len(words_in_book) - len(sentence)):
-        right = left
-        for next_word in sentence:
-            if (words_in_book[right] == next_word) or next_word == '_':
-                right += 1
+
+    match = []
+    match_start = 0
+
+    for il, line in enumerate(lines_words):
+        for word in line:
+            if len(match) == 0:
+                match_start = il
+            if sentence[len(match)] in [word, '_']:
+                match.append(word)
             else:
-                break
-        else:
-            results.append(' '.join(words_in_book[left:right]))
+                match.clear()
+                if sentence[len(match)] in [word, '_']:
+                    match.append(word)
+            if len(match) == len(sentence):
+                results.append((' '.join(match),
+                                f'll. {match_start+1}-{il+1}'
+                                if match_start != il else f'l. {il+1}'))
+                match.clear()
 
     # ergebnisse ausgeben
     if len(results) == 0:
-        print(f"Kein Ergebnis gefunden! ({format((time()-start_time)*1000, '.2f')}ms)")
+        print(f"Kein Ergebnis gefunden! ({format((time() - start_time)*1000, '.2f')}ms)")
     else:
-        print(f"{len(results)} Ergebnis{'se' if len(results) > 1 else ''} gefunden: ({format((time()-start_time)*1000, '.2f')}ms)")
+        print(f"{len(results)} Ergebnis{'se' if len(results) > 1 else ''} gefunden:"
+              f" ({format((time() - start_time)*1000, '.2f')}ms)")
         print()
-        for result in results:
-            print(f'> {result}')
+        for result, line_ref in results:
+            print(f'> {result} ({line_ref})')
 
 
 # programmschleife
@@ -68,3 +82,6 @@ while True:
         main()
     except Exception as e:
         print(e)
+    except KeyboardInterrupt:
+        print('\n')
+        exit()
