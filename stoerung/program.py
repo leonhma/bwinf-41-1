@@ -1,7 +1,8 @@
+from itertools import chain
 from os import path
 from re import findall
 from time import time
-from typing import List
+from typing import List, Tuple
 
 
 def r_path(path_: str) -> str:
@@ -11,14 +12,13 @@ def r_path(path_: str) -> str:
     )
 
 
-# die zeilen-wörter matrix
-lines_words: List[List[str]]
+# die wörter-liste
+book: Tuple[Tuple[int, str]]
 
 with open(r_path('beispieldaten/Alice_im_Wunderland.txt'), 'r') as f:
-    lines_words = list(map(
-        lambda x: list(map(lambda y: y.lower(),
-                           findall('(\\w+?)(?:\\W|$)', x))),
-        f.read().split('\n')))
+    book = tuple(chain(*map(
+        lambda x: ((x[0], word.lower()) for word in findall(r'(\w+?)(?:\W|$)', x[1])),
+                ((i, line) for i, line in enumerate(f.read().split('\n'))))))
 
 
 # hauptprogramm
@@ -38,27 +38,20 @@ def main():
         sentence = text.split()
     print()
 
-    # iterieren über das wörterarray und aufbauen eines treffers
+    # iterieren über das wörterarray und vergleichen mit dem beispielsatz
     results: List[str] = []
-
-    match = []
-    match_start = 0
-
-    for il, line in enumerate(lines_words):
-        for word in line:
-            if len(match) == 0:
-                match_start = il
-            if sentence[len(match)] in [word, '_']:
-                match.append(word)
+    for left in range(len(book) - len(sentence)):
+        right = left
+        for next_word in sentence:
+            if (book[right][1] == next_word) or next_word == '_':
+                right += 1
             else:
-                match.clear()
-                if sentence[len(match)] in [word, '_']:
-                    match.append(word)
-            if len(match) == len(sentence):
-                results.append((' '.join(match),
-                                f'll. {match_start+1}-{il+1}'
-                                if match_start != il else f'l. {il+1}'))
-                match.clear()
+                break
+        else:
+            line_l, line_r = book[left][0] + 1, book[right - 1][0] + 1
+            results.append((
+                ' '.join(map(lambda x: x[1], book[left:right])),
+                f'l. {line_l}' if line_l == line_r else f'll. {line_l}-{line_r}'))
 
     # ergebnisse ausgeben
     if len(results) == 0:

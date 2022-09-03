@@ -8,10 +8,8 @@ packages = [{include = "bwinf_41_1"}]
 
 [tool.poetry.dependencies]
 python = "^3.6"
+fire = "^0.4.0"
 
-
-[tool.poetry.group.dev.dependencies]
-more-itertools = "^8.14.0"
 
 [build-system]
 requires = ["poetry-core"]
