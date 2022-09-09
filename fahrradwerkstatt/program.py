@@ -5,6 +5,7 @@ from typing import Generator, List, Mapping, Tuple
 from collections import deque
 from pandas import DataFrame
 
+
 def r_path(path_: str) -> str:
     return path.join(
         path.dirname(path.abspath(__file__)),
@@ -42,16 +43,15 @@ def process_by_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
         done = max(done, submit)
 
         p.put((duration, submit))
-        try:
-            while i + 1 == len(queue) or done < queue[i + 1][0]:
-                duration, submit = p.get(block=False, timeout=0)
-                wait = max(0, done - submit) + duration
-                done = submit + wait
+        while not p.empty() and (i + 1 == len(queue) or done < queue[i + 1][0]):
+            duration, submit = p.get(block=False, timeout=0)
+            wait = max(0, done - submit) + duration
+            done = done + duration
 
-                max_wait = max(max_wait, wait)
-                avg_wait = (n_avg_wait * avg_wait + wait) / (n_avg_wait + 1)
-        except Empty:
-            continue
+            max_wait = max(max_wait, wait)
+            avg_wait = (n_avg_wait * avg_wait + wait) / (n_avg_wait + 1)
+            n_avg_wait += 1
+
     return max_wait, avg_wait
 
 
@@ -77,7 +77,7 @@ def main():
 
     df = DataFrame(data, index=['Maximale Wartezeit (min)', 'Durchschnittliche Wartezeit (min)'])
 
-    print(f'Warteschlange simuliert in {format(time()-start_time, ".4f")}ms:')
+    print(f'Warteschlange simuliert in {format(time()-start_time, ".3f")}ms:')
     print()
     print(df.to_markdown())
 
@@ -87,6 +87,10 @@ print('Fahrradwerkstatt')
 print('(Drücke ^C um das Programm zu beenden)')
 
 while True:
-    main()
-    # except Exception as e:
-    #     print(e)
+    try:
+        main()
+    except Exception as e:
+        print(e)
+    except KeyboardInterrupt:
+        print('\n')
+        exit()
