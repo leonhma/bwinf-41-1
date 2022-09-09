@@ -42,7 +42,7 @@ def process_by_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     for i, (submit, duration) in enumerate(queue):
         done = max(done, submit)
 
-        p.put((duration, submit))
+        p.put((duration, submit)) # O(log n) binary-search
         while not p.empty() and (i + 1 == len(queue) or done < queue[i + 1][0]):
             duration, submit = p.get(block=False, timeout=0)
             wait = max(0, done - submit) + duration
@@ -70,6 +70,8 @@ def main():
         for a, b in map(lambda x: tuple(map(int, x.split())),
                         filter(lambda x: x != '', f.read().split('\n'))):
             queue.append((a, b))
+
+    queue.sort()
 
     processors = [process_by_submit, process_by_duration]
 
