@@ -6,13 +6,19 @@
 
 Die Idee zur Lösung ist, den Zeitpunkt der Aufgabe des Auftrags und dessen Dauer in einer Liste zu speichern. Nun werden die Aufträge mit den gegebenen Methoden (nach Zeitpunkt oder Dauer) bearbeitet und die Ergebnisse ausgegeben.
 
+## Verbesserungen
+
+Wie die Simulation zeigt ist auch die zweite Methode nicht optimal. Zwar wird die durchschnittlich Dauer der Aufträge gekürzt, aber oft steigt auch die maximale Wartezeit. Das liegt daran, dass kurze Aufträge den Langen vorgezogen werden, und es so passieren kann, dass längere Aufträge durch die wiederholte Aufgabe von kürzeren Aufträgen immer wieder in der Warteschlange nach hinten verschoben werden. So wird die Kundenzufriedenheit und die Verbindlichkeit der Prognosen zur Auftragsdauer verschlechtert. Um dieses Geschehnis zu berücksichtigen, wird zusätzlich zur maximalen- und durchschnittlichen Wartezeit auch die prozentuale Anzahl der Aufträge, die hinter kürzere Aufträge verschoben wurden gezählt. Der Kehrwert dieser Metrik kann auch als 'Fairness' oder 'Verbindlichkeit der Zeitprognosen' betrachtet werden.
+
+
+
 ## Umsetzung
 
 Das Programm ist in Python umgesetzt und mit einer Umgebung ab der Version `3.6` ausführbar. Das Programm befindet sich in der Datei `program.py` in diesem Ordner.
 
 Zuerst werden die Aufträge aus dem Beispiel in eine Liste geladen. Die Aufträge werden dabei als Tuple gespeichert. Das erste Element ist der Zeitpunkt der Aufgabe des Auftrags, das zweite Element ist die Dauer des Auftrags. Zur Sicherheit wird die Liste noch einmal nach Eingangszeitpunkt sortiert.
 
-Nun werden die Aufträge mit den gegebenen Methoden bearbeitet. Die Ergebnisse werden in einem DataFrame aus der Bibliothek `pandas` gespeichert, um eine formatierte Ausgabe zu erleichtern.
+Nun werden die Aufträge mit den gegebenen Methoden bearbeitet. Hier gibt zusätzlich zu den vorgeschlagenen Methoden `process_by_submit` (Die Aufträge werden in der Reihenfolge ihrer Aufgabe bearbeitet) und `process_by_duration` (Unter den verfügbaren Aufträgen wird immer der Kürzeste ausgewählt). Die Ergebnisse werden in einem DataFrame aus der Bibliothek `pandas` gespeichert, um eine formatierte Ausgabe zu erleichtern.
 
 Letztendlich werden die Ergebnisse formatiert ausgegeben.
 
@@ -42,8 +48,8 @@ Warteschlange simuliert in 0.004ms:
 
 |                                   |   process_by_submit |   process_by_duration |
 |:----------------------------------|--------------------:|----------------------:|
-| Maximale Wartezeit (min)          |                8500 |               8500    |
-| Durchschnittliche Wartezeit (min) |                1339 |               2048.46 |
+| Maximale Wartezeit (min)          |             8500    |               8500    |
+| Durchschnittliche Wartezeit (min) |             2098.87 |               2048.46 |
 
 ```
 
@@ -53,12 +59,12 @@ Warteschlange simuliert in 0.004ms:
 
 ```text
 
-Warteschlange simuliert in 0.009ms:
+Warteschlange simuliert in 0.010ms:
 
 |                                   |   process_by_submit |   process_by_duration |
 |:----------------------------------|--------------------:|----------------------:|
-| Maximale Wartezeit (min)          |                2638 |                2927   |
-| Durchschnittliche Wartezeit (min) |                  17 |                 425.8 |
+| Maximale Wartezeit (min)          |             2638    |                2927   |
+| Durchschnittliche Wartezeit (min) |              484.82 |                 425.8 |
 
 ```
 
@@ -72,8 +78,8 @@ Warteschlange simuliert in 0.004ms:
 
 |                                   |   process_by_submit |   process_by_duration |
 |:----------------------------------|--------------------:|----------------------:|
-| Maximale Wartezeit (min)          |                9755 |              10295    |
-| Durchschnittliche Wartezeit (min) |                  17 |               1433.26 |
+| Maximale Wartezeit (min)          |             9755    |              10295    |
+| Durchschnittliche Wartezeit (min) |             1660.39 |               1433.26 |
 
 ```
 
@@ -83,12 +89,12 @@ Warteschlange simuliert in 0.004ms:
 
 ```text
 
-Warteschlange simuliert in 0.004ms:
+Warteschlange simuliert in 0.006ms:
 
 |                                   |   process_by_submit |   process_by_duration |
 |:----------------------------------|--------------------:|----------------------:|
-| Maximale Wartezeit (min)          |                5319 |               5831    |
-| Durchschnittliche Wartezeit (min) |                1454 |               1075.27 |
+| Maximale Wartezeit (min)          |             5319    |               5831    |
+| Durchschnittliche Wartezeit (min) |             1099.88 |               1075.27 |
 
 ```
 
@@ -98,12 +104,12 @@ Warteschlange simuliert in 0.004ms:
 
 ```text
 
-Warteschlange simuliert in 0.006ms:
+Warteschlange simuliert in 0.004ms:
 
 |                                   |   process_by_submit |   process_by_duration |
 |:----------------------------------|--------------------:|----------------------:|
-| Maximale Wartezeit (min)          |               11803 |              18885    |
-| Durchschnittliche Wartezeit (min) |                2957 |               2896.11 |
+| Maximale Wartezeit (min)          |             11803   |              18885    |
+| Durchschnittliche Wartezeit (min) |              3284.3 |               2896.11 |
 
 ```
 

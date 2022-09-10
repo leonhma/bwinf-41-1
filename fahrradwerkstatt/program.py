@@ -15,45 +15,91 @@ def r_path(path_: str) -> str:
 
 def process_by_submit(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     queue.sort(key=lambda x: x[0])
-
-    max_wait = 0
-    avg_wait = 0
-    n_avg_wait = 0
     done = 0
 
+    max_wait = 0
+
+    avg_wait = 0
+    n_avg_wait = 0
+
+    current_submit = 0
+    current_fairness_violations = 0
+
     for submit, duration in queue:
+        if submit < current_submit:
+            current_fairness_violations += 1
+        current_submit = submit
         wait = max(0, done - submit) + duration
-        done = submit + wait
+        done = max(done, submit)+duration
 
         max_wait = max(max_wait, wait)
         avg_wait = (n_avg_wait * avg_wait + wait) / (n_avg_wait + 1)
+        n_avg_wait += 1
 
-    return max_wait, avg_wait
+    return max_wait, avg_wait, current_fairness_violations/len(queue)*100
 
 
 def process_by_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     p = PriorityQueue()
+    done = 0
 
     max_wait = 0
+
     avg_wait = 0
     n_avg_wait = 0
-    done = 0
+
+    current_submit = 0
+    current_fairness_violations = 0
 
     for i, (submit, duration) in enumerate(queue):
         done = max(done, submit)
 
-        p.put((duration, submit)) # O(log n) binary-search
+        p.put((duration, submit))
         while not p.empty() and (i + 1 == len(queue) or done < queue[i + 1][0]):
             duration, submit = p.get(block=False, timeout=0)
+            if submit < current_submit:
+                current_fairness_violations += 1
+            current_submit = submit
             wait = max(0, done - submit) + duration
-            done = done + duration
+            done = done+duration
 
             max_wait = max(max_wait, wait)
             avg_wait = (n_avg_wait * avg_wait + wait) / (n_avg_wait + 1)
             n_avg_wait += 1
 
-    return max_wait, avg_wait
+    return max_wait, avg_wait, current_fairness_violations/len(queue)*100
 
+
+def process_by_inverse_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
+    p = PriorityQueue()
+    done = 0
+
+    max_wait = 0
+
+    avg_wait = 0
+    n_avg_wait = 0
+
+    current_submit = 0
+    current_fairness_violations = 0
+
+    for i, (submit, duration) in enumerate(queue):
+        done = max(done, submit)
+
+        p.put((1/duration, submit))
+        while not p.empty() and (i + 1 == len(queue) or done < queue[i + 1][0]):
+            duration_recip, submit = p.get(block=False, timeout=0)
+            duration = 1/duration_recip
+            if submit < current_submit:
+                current_fairness_violations += 1
+            current_submit = submit
+            wait = max(0, done - submit) + duration
+            done = done+duration
+
+            max_wait = max(max_wait, wait)
+            avg_wait = (n_avg_wait * avg_wait + wait) / (n_avg_wait + 1)
+            n_avg_wait += 1
+
+    return max_wait, avg_wait, current_fairness_violations/len(queue)*100
 
 # hauptprogramm
 def main():
@@ -73,15 +119,15 @@ def main():
 
     queue.sort()
 
-    processors = [process_by_submit, process_by_duration]
+    processors = [process_by_submit, process_by_duration, process_by_inverse_duration]
 
     data = {processor.__name__: processor(queue) for processor in processors}
 
-    df = DataFrame(data, index=['Maximale Wartezeit (min)', 'Durchschnittliche Wartezeit (min)'])
+    df = DataFrame(data, index=['Maximale Wartezeit (min)', 'Durchschnittliche Wartezeit (min)', 'Vorgezogene Aufträge (%)'])
 
-    print(f'Warteschlange simuliert in {format(time()-start_time, ".3f")}ms:')
+    print(f'Aufträge simuliert in {format(time()-start_time, ".3f")}ms:')
     print()
-    print(df.to_markdown())
+    print(df.to_markdown(tablefmt='fancy_grid', floatfmt='.3f'))
 
 
 # programmschleife
