@@ -9,20 +9,19 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
-    <!-- Roboto -->
+    <!-- Roboto (async) -->
     <link
-      rel="stylesheet"
+      rel="preload"
       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
-    <!-- Roboto Mono -->
+    <!-- Roboto Mono (async) -->
     <link
-      rel="stylesheet"
+      rel="preload"
       href="https://fonts.googleapis.com/css?family=Roboto+Mono"
-    />
-    <!-- bare.css smui theme -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/svelte-material-ui@6.0.0/bare.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
   </head>
   <body></body>

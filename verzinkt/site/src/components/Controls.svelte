@@ -1,6 +1,8 @@
 <script lang="ts">
   import IconButton, { Icon } from "@smui/icon-button";
+  import "@smui/icon-button/bare.css"
   import Card, { Actions } from "@smui/card";
+  import "@smui/card/bare.css"
 
   export let isRunning = false
 </script>
