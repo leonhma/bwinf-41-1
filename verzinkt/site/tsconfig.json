@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["node", "svelte"],
     "outDir": "./dist/",
     "noImplicitAny": true,
     "target": "ES6",

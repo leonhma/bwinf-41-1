@@ -1,3 +1,0 @@
-# The library
-
-MIT license

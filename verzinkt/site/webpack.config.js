@@ -48,7 +48,7 @@ module.exports = (env) => {
       ],
     },
     experiments: {
-      asyncWebAssembly: true
+      asyncWebAssembly: true,
     },
     output: {
       path: path.resolve(__dirname, "./dist"),
@@ -56,10 +56,13 @@ module.exports = (env) => {
       filename: "[id].bundle.js",
     },
     plugins: [
-      new HTMLWebpackPlugin({ title: "A2" }),
+      new HTMLWebpackPlugin({
+        title: "A2",
+        favicon: "./src/assets/favicon.ico",
+      }),
       new MiniCssExtractPlugin({ filename: "[name].css" }),
       new WasmPackPlugin({
-        crateDirectory: path.resolve(__dirname, "./src/lib"),
+        crateDirectory: path.resolve(__dirname, "."),
         forceMode: mode,
       }),
     ],

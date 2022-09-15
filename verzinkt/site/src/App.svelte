@@ -1,6 +1,7 @@
 <script lang="ts">
-  import {greet} from './lib/pkg'
-  greet('leonhma')
+  import Controls from "./components/Controls.svelte";
 </script>
 
-hi
+<div>
+  <Controls />
+</div>
