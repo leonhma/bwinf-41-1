@@ -8,14 +8,14 @@
 <div>
   <Card>
     <Actions>
-      <IconButton class="material_icons" title="Zurücksetzen">keyboard_double_arrow_left</IconButton>
-      <IconButton class="material_icons" title="Schritt zurück">keyboard_arrow_left</IconButton>
-      <IconButton class="material_icons" bind:pressed={isRunning}>
-        <Icon class="material_icons" title="Pause" on>pause</Icon>
-        <Icon class="material_icons" title="Start" off>play_arrow</Icon>
+      <IconButton class="material-icons" title="Zurücksetzen">keyboard_double_arrow_left</IconButton>
+      <IconButton class="material-icons" title="Schritt zurück">keyboard_arrow_left</IconButton>
+      <IconButton class="material-icons" bind:pressed={isRunning}>
+        <Icon class="material-icons" title="Pause" on>pause</Icon>
+        <Icon class="material-icons" title="Start" off>play_arrow</Icon>
       </IconButton>
-      <IconButton class="material_icons" title="Schritt vor">keyboard_arrow_right</IconButton>
-      <IconButton class="material_icons" title="Schnelldurchlauf">keyboard_double_arrow_right</IconButton>
+      <IconButton class="material-icons" title="Schritt vor">keyboard_arrow_right</IconButton>
+      <IconButton class="material-icons" title="Schnelldurchlauf">keyboard_double_arrow_right</IconButton>
     </Actions>
   </Card>
 </div>
