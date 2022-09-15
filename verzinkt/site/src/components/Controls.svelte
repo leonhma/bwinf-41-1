@@ -12,7 +12,7 @@
     <Actions>
       <IconButton class="material-icons" title="Zurücksetzen">keyboard_double_arrow_left</IconButton>
       <IconButton class="material-icons" title="Schritt zurück">keyboard_arrow_left</IconButton>
-      <IconButton class="material-icons" toggle ariaLabelOn="Simulation pausieren" araiLabelOff="Simulation fortsetzen" bind:pressed={isRunning}>
+      <IconButton class="material-icons" toggle ariaLabelOn="Simulation pausieren" ariaLabelOff="Simulation fortsetzen" bind:pressed={isRunning}>
         <Icon class="material-icons" title="Pause" on>pause</Icon>
         <Icon class="material-icons" title="Start" off>play_arrow</Icon>
       </IconButton>
