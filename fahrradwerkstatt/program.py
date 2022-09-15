@@ -1,8 +1,7 @@
-from queue import Empty, PriorityQueue
+from queue import PriorityQueue
 from time import time
 from os import path
-from typing import Generator, List, Mapping, Tuple
-from collections import deque
+from typing import List, Tuple
 from pandas import DataFrame
 
 
@@ -70,37 +69,6 @@ def process_by_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     return max_wait, avg_wait, current_fairness_violations/len(queue)*100
 
 
-def process_by_inverse_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
-    p = PriorityQueue()
-    done = 0
-
-    max_wait = 0
-
-    avg_wait = 0
-    n_avg_wait = 0
-
-    current_submit = 0
-    current_fairness_violations = 0
-
-    for i, (submit, duration) in enumerate(queue):
-        done = max(done, submit)
-
-        p.put((1/duration, submit))
-        while not p.empty() and (i + 1 == len(queue) or done < queue[i + 1][0]):
-            duration_recip, submit = p.get(block=False, timeout=0)
-            duration = 1/duration_recip
-            if submit < current_submit:
-                current_fairness_violations += 1
-            current_submit = submit
-            wait = max(0, done - submit) + duration
-            done = done+duration
-
-            max_wait = max(max_wait, wait)
-            avg_wait = (n_avg_wait * avg_wait + wait) / (n_avg_wait + 1)
-            n_avg_wait += 1
-
-    return max_wait, avg_wait, current_fairness_violations/len(queue)*100
-
 # hauptprogramm
 def main():
     print()
@@ -119,11 +87,12 @@ def main():
 
     queue.sort()
 
-    processors = [process_by_submit, process_by_duration, process_by_inverse_duration]
+    processors = [process_by_submit, process_by_duration]
 
     data = {processor.__name__: processor(queue) for processor in processors}
 
-    df = DataFrame(data, index=['Maximale Wartezeit (min)', 'Durchschnittliche Wartezeit (min)', 'Vorgezogene Aufträge (%)'])
+    df = DataFrame(data, index=['Maximale Wartezeit (min)',
+                   'Durchschnittliche Wartezeit (min)', 'Vorgezogene Aufträge (%)'])
 
     print(f'Aufträge simuliert in {format(time()-start_time, ".3f")}ms:')
     print()

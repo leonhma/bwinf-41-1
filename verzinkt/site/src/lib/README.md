@@ -1,0 +1,3 @@
+# The library
+
+MIT license

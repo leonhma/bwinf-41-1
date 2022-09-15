@@ -1,0 +1,18 @@
+[package]
+name = "lib"
+version = "0.1.0"
+description = "The library powering the canvas."
+repository = "https://github.com/leonhma/bwinf-40-1"
+license = "MIT"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+wasm-bindgen = "0.2"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
