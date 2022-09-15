@@ -57,7 +57,7 @@ module.exports = (env) => {
     },
     plugins: [
       new HTMLWebpackPlugin({
-        title: "A2",
+        title: "bwinf-41-1",
         favicon: "./src/assets/favicon.ico",
       }),
       new MiniCssExtractPlugin({ filename: "[name].css" }),
