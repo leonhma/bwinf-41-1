@@ -17,7 +17,7 @@ module.exports = (env) => {
     module: {
       rules: [
         {
-          test: /\.tsx?$/,
+          test: /\.ts$/,
           use: "ts-loader",
           exclude: /node_modules/,
         },
@@ -57,7 +57,6 @@ module.exports = (env) => {
     },
     plugins: [
       new HTMLWebpackPlugin({
-        title: "bwinf-41-1",
         favicon: "./src/assets/favicon.ico",
       }),
       new MiniCssExtractPlugin({ filename: "[name].css" }),
