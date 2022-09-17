@@ -12,7 +12,7 @@ module.exports = (env) => {
   return {
     entry: "./src/index.ts",
     mode,
-    devtool: prod ? false : "inline-source-map",
+    devtool: prod ? false : "source-map",
     devServer: {
       static: path.resolve(__dirname, "dist"),
     },

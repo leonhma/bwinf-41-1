@@ -1,6 +1,3 @@
-<script lang="ts">
-</script>
-
 <div class="canvas">
   <canvas id="simulationCanvas" width="1080" height="720" />
 </div>

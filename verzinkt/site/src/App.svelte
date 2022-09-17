@@ -1,13 +1,20 @@
 <script lang="ts">
-  import Controls from "./components/Canvas.svelte";
+  import Canvas from "./components/Canvas.svelte";
   import Sidebar from "./components/Sidebar.svelte";
+  import Controls from "./components/Controls.svelte";
+  import Buttons from "./components/Buttons.svelte";
+  import Settings from "./components/Settings.svelte";
   import "@material/typography/dist/mdc.typography.min.css";
-  import './reset.css';
+  import "./reset.css";
 </script>
 
 <div class="container">
-  <Controls />
-  <Sidebar />
+  <Canvas />
+  <Sidebar>
+    <Settings />
+    <Buttons />
+    <Controls />
+  </Sidebar>
 </div>
 
 <style>

@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "types": ["node", "svelte"],
+    "types": ["node", "svelte", "@types/wicg-file-system-access"],
     "outDir": "./dist/",
     "noImplicitAny": true,
     "target": "ES6",
     "moduleResolution": "node"
-  }
+  },
+  "include": ["src/**/*", "declaration.d.ts"]
 }
