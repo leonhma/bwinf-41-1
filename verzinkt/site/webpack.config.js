@@ -1,6 +1,8 @@
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
+const SveltePreprocess = require("svelte-preprocess");
 const path = require("path");
 
 module.exports = (env) => {
@@ -10,7 +12,10 @@ module.exports = (env) => {
   return {
     entry: "./src/index.ts",
     mode,
-    devtool: prod ? false : "source-map",
+    devtool: prod ? false : "inline-source-map",
+    devServer: {
+      static: path.resolve(__dirname, "dist"),
+    },
     resolve: {
       extensions: [".ts", ".svelte", ".js"],
     },
@@ -22,10 +27,15 @@ module.exports = (env) => {
           exclude: /node_modules/,
         },
         {
+          test: /\.(ico)$/,
+          type: "asset/resource",
+        },
+        {
           test: /\.svelte$/,
           use: {
             loader: "svelte-loader",
             options: {
+              preprocess: SveltePreprocess(),
               compilerOptions: {
                 dev: !prod,
               },
@@ -53,13 +63,14 @@ module.exports = (env) => {
     output: {
       path: path.resolve(__dirname, "./dist"),
       clean: true,
-      filename: "[id].bundle.js",
+      filename: "bundle.js",
     },
     plugins: [
-      new HTMLWebpackPlugin({
-        favicon: "./src/assets/favicon.ico",
-      }),
+      new HTMLWebpackPlugin(),
       new MiniCssExtractPlugin({ filename: "[name].css" }),
+      new CopyPlugin({
+        patterns: ["public"],
+      }),
       new WasmPackPlugin({
         crateDirectory: path.resolve(__dirname, "."),
         forceMode: mode,
