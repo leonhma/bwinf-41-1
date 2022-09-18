@@ -1,26 +1,16 @@
 <script lang="ts">
   import Slider from "@smui/slider";
   import "@smui/slider/bare.css";
+  import { simulationProps } from "../index";
+  import Color from "./Color.svelte";
 
   const v_min = 0.1,
     v_max = 10,
     v_step = 0.1;
 
-  let v_up_start = 4.5,
-    v_up_end = 5.5,
-    v_down_start = 4.5,
-    v_down_end = 5.5,
-    v_left_start = 4.5,
-    v_left_end = 5.5,
-    v_right_start = 4.5,
-    v_right_end = 5.5;
-
   const d_t_min = 0,
     d_t_max = 200,
     d_t_step = 2;
-
-  let d_t_start = 80,
-    d_t_end = 120;
 </script>
 
 <div class="settings">
@@ -31,8 +21,8 @@
     min={v_min}
     max={v_max}
     step={v_step}
-    bind:start={v_up_start}
-    bind:end={v_up_end}
+    bind:start={$simulationProps.v_up_start}
+    bind:end={$simulationProps.v_up_end}
     style="margin: 0"
   />
 
@@ -43,8 +33,8 @@
     min={v_min}
     max={v_max}
     step={v_step}
-    bind:start={v_down_start}
-    bind:end={v_down_end}
+    bind:start={$simulationProps.v_down_start}
+    bind:end={$simulationProps.v_down_end}
     style="margin: 0"
   />
 
@@ -55,8 +45,8 @@
     min={v_min}
     max={v_max}
     step={v_step}
-    bind:start={v_left_start}
-    bind:end={v_left_end}
+    bind:start={$simulationProps.v_left_start}
+    bind:end={$simulationProps.v_left_end}
     style="margin: 0"
   />
 
@@ -67,8 +57,8 @@
     min={v_min}
     max={v_max}
     step={v_step}
-    bind:start={v_right_start}
-    bind:end={v_right_end}
+    bind:start={$simulationProps.v_right_start}
+    bind:end={$simulationProps.v_right_end}
     style="margin: 0"
   />
 
@@ -79,16 +69,18 @@
     min={d_t_min}
     max={d_t_max}
     step={d_t_step}
-    bind:start={d_t_start}
-    bind:end={d_t_end}
+    bind:start={$simulationProps.d_t_start}
+    bind:end={$simulationProps.d_t_end}
     style="margin: 0"
   />
+  <Color />
 </div>
 
 <style>
   .settings {
-    margin: 0 2.4em auto;
+    margin: 0 2.4em;
     padding-top: 1em;
+    flex-grow: 3;
 
     background: #fefefe;
     display: grid;

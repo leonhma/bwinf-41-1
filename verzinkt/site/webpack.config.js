@@ -17,7 +17,7 @@ module.exports = (env) => {
       static: path.resolve(__dirname, "dist"),
     },
     resolve: {
-      extensions: [".ts", ".svelte", ".js"],
+      extensions: [".ts", ".svelte", ".mjs", ".js"],
     },
     module: {
       rules: [
@@ -51,6 +51,12 @@ module.exports = (env) => {
         {
           // required to prevent errors from Svelte on Webpack 5+
           test: /node_modules\/svelte\/.*\.mjs$/,
+          resolve: {
+            fullySpecified: false,
+          },
+        },
+        {
+          test: /\.m?js$/,
           resolve: {
             fullySpecified: false,
           },

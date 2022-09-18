@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@ctrl/tinycolor@^3.4.1":
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.1.tgz#75b4c27948c81e88ccd3a8902047bcd797f38d32"
+  integrity sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==
+
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
@@ -910,6 +915,11 @@ color-name@~1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
+
+color-picker-svelte@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/color-picker-svelte/-/color-picker-svelte-1.0.0.tgz#2288f39a9c534faba8bdee027409fe8504684dbd"
+  integrity sha512-FD4eTGf7fDp+oBdevok68syTyRXNrwHVYu4bqq7FiL6Py1Gqp18l1c36YWzIYtts/OGNsP2KtZeGmGCO/7yglw==
 
 colorette@^2.0.10, colorette@^2.0.14:
   version "2.0.19"

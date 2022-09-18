@@ -15,6 +15,7 @@
     <Buttons />
     <Controls />
   </Sidebar>
+
 </div>
 
 <style>

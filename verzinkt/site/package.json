@@ -11,11 +11,13 @@
     "dev": "webpack serve"
   },
   "devDependencies": {
+    "@ctrl/tinycolor": "^3.4.1",
     "@smui/button": "^6.1.0",
     "@smui/icon-button": "^6.1.0",
     "@smui/slider": "^6.1.0",
     "@types/wicg-file-system-access": "^2020.9.5",
     "@wasm-tool/wasm-pack-plugin": "^1.6.0",
+    "color-picker-svelte": "^1.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",

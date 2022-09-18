@@ -1,5 +1,11 @@
+<script lang="ts">
+  import { simulationData } from "../index";
+
+  
+</script>
+
 <div class="canvas">
-  <canvas id="simulationCanvas" width="1080" height="720" />
+  <canvas bind:this={$simulationData.canvas} id="simulationCanvas" width="1080" height="720" />
 </div>
 
 <style>

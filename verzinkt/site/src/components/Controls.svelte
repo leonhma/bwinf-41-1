@@ -7,22 +7,20 @@
 
 <div class="wrapper">
   <div class="controls">
-    <IconButton class="material-icons" disabled={isPlaying}
-      >keyboard_double_arrow_left</IconButton
+    <IconButton class="material-icons">skip_previous</IconButton
     >
-    <IconButton class="material-icons" disabled={isPlaying}
-      >keyboard_arrow_left</IconButton
+    <IconButton class="material-icons">fast_forward</IconButton
     >
 
     <IconButton toggle bind:pressed={isPlaying}>
       <Icon class="material-icons" off>play_arrow</Icon>
       <Icon class="material-icons" on>pause</Icon>
     </IconButton>
+    
     <IconButton class="material-icons" disabled={isPlaying}
       >keyboard_arrow_right</IconButton
     >
-    <IconButton class="material-icons" disabled={isPlaying}
-      >keyboard_double_arrow_right</IconButton
+    <IconButton class="material-icons">skip_next</IconButton
     >
   </div>
 </div>
