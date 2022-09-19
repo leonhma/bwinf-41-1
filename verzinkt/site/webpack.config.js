@@ -13,9 +13,6 @@ module.exports = (env) => {
     entry: "./src/index.ts",
     mode,
     devtool: prod ? false : "source-map",
-    devServer: {
-      static: path.resolve(__dirname, "dist"),
-    },
     resolve: {
       extensions: [".ts", ".svelte", ".mjs", ".js"],
     },
@@ -40,7 +37,6 @@ module.exports = (env) => {
                 dev: !prod,
               },
               emitCss: prod,
-              hotReload: !prod,
             },
           },
         },
@@ -64,7 +60,7 @@ module.exports = (env) => {
       ],
     },
     experiments: {
-      asyncWebAssembly: true,
+      futureDefaults: true,
     },
     output: {
       path: path.resolve(__dirname, "./dist"),
@@ -72,18 +68,28 @@ module.exports = (env) => {
       filename: "bundle.js",
     },
     plugins: [
-      new HTMLWebpackPlugin(),
-      new MiniCssExtractPlugin({ filename: "[name].css" }),
+      new HTMLWebpackPlugin({ publicPath: "/" }),
+      new MiniCssExtractPlugin(),
       new CopyPlugin({
-        patterns: ["public"],
+        patterns: ["public", "pkg/index_bg.wasm"],
       }),
       new WasmPackPlugin({
         crateDirectory: path.resolve(__dirname, "."),
         forceMode: mode,
+        extraArgs: "--target web",
       }),
     ],
     devServer: {
       hot: true,
+      server: "https",
+      static: ["public"],
+      watchFiles: [
+        "src",
+        "cargo.toml",
+        "declaration.d.ts",
+        "package.json",
+        "tsconfig.json",
+      ],
     },
   };
 };

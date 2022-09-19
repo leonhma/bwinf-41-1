@@ -13,8 +13,10 @@
   "devDependencies": {
     "@ctrl/tinycolor": "^3.4.1",
     "@smui/button": "^6.1.0",
+    "@smui/circular-progress": "^6.1.0",
     "@smui/icon-button": "^6.1.0",
     "@smui/slider": "^6.1.0",
+    "@smui/snackbar": "^6.1.0",
     "@types/wicg-file-system-access": "^2020.9.5",
     "@wasm-tool/wasm-pack-plugin": "^1.6.0",
     "color-picker-svelte": "^1.0.0",

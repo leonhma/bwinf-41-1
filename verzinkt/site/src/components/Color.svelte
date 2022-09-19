@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Color, ColorInput } from "color-picker-svelte";
 
-  let color = new Color("#ffffff");
+  let color = new Color("#79818f");
 </script>
 
 <div class="color">
-  <ColorInput bind:color title="Farbe" />
+  <ColorInput bind:color title="Farbe" showAlphaSlider/>
 </div>
 
 <style>
