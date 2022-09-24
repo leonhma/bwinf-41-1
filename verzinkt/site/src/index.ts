@@ -1,5 +1,6 @@
 import App from "./App.svelte";
-import { writable, get } from "svelte/store";
+import { writable } from "svelte/store";
+import "wasm-tracing-allocator";
 
 export const simulationProps = writable({
   v_up_start: 4.5,

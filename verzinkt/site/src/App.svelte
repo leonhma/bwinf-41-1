@@ -16,8 +16,6 @@
   import "@smui/circular-progress/bare.css";
   import "./reset.css";
 
-  import wasm, { Simulation } from "../pkg";
-
   let loadingSnackbar: SnackbarComponentDev,
     loadingFinishedSnackbar: SnackbarComponentDev,
     secureContextSnackbar: SnackbarComponentDev;
@@ -28,12 +26,14 @@
     }
 
     let showsLoadingIndicator = false,
-      finishedLoading = false;
+      finishedLoading = false,
+      Simulation: typeof import("../pkg").Simulation;
 
     // asynchronously load the wasm module
     await Promise.all([
       (async function () {
-        wasm("index_bg.wasm").then(() => {
+        await import("../pkg").then((mod) => {
+          Simulation = mod.Simulation;
           finishedLoading = true;
           loadingSnackbar.close();
           if (showsLoadingIndicator) {
@@ -53,7 +53,7 @@
       }),
     ]);
 
-    let simulation: Simulation;
+    let simulation: any;
 
     const props = get(simulationProps);
 
@@ -68,11 +68,10 @@
           props.v_left_end,
           props.v_right_start,
           props.v_right_end,
-          props.d_t_start,
-          props.d_t_end,
           [255, 255, 255, 255],
           data.canvas
         );
+        console.log('created new instance of simulation')
       }
     });
   });

@@ -1,7 +1,7 @@
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 const SveltePreprocess = require("svelte-preprocess");
 const path = require("path");
 
@@ -60,7 +60,7 @@ module.exports = (env) => {
       ],
     },
     experiments: {
-      futureDefaults: true,
+      asyncWebAssembly: true,
     },
     output: {
       path: path.resolve(__dirname, "./dist"),
@@ -71,18 +71,16 @@ module.exports = (env) => {
       new HTMLWebpackPlugin({ publicPath: "/" }),
       new MiniCssExtractPlugin(),
       new CopyPlugin({
-        patterns: ["public", "pkg/index_bg.wasm"],
+        patterns: ["public/"],
       }),
       new WasmPackPlugin({
         crateDirectory: path.resolve(__dirname, "."),
         forceMode: mode,
-        extraArgs: "--target web",
       }),
     ],
     devServer: {
       hot: true,
       server: "https",
-      static: ["public"],
       watchFiles: [
         "src",
         "cargo.toml",
