@@ -64,7 +64,7 @@ module.exports = (env) => {
     },
     output: {
       path: path.resolve(__dirname, "./dist"),
-      publicPath: prod? "gL5WY3fPt751WfPpougU/" : "/",
+      publicPath: prod ? "/gL5WY3fPt751WfPpougU/" : "/",
       clean: true,
     },
     plugins: [

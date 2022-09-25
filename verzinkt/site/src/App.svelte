@@ -33,7 +33,7 @@
     // asynchronously load the wasm module
     await Promise.all([
       (async function () {
-        await import("../pkg").then((module) => {
+        await import(/* webpackPreload: true */ "../pkg").then((module) => {
           Simulation = module.Simulation;
           finishedLoading = true;
           loadingSnackbar.close();
