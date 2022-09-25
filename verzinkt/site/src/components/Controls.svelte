@@ -2,26 +2,27 @@
   import IconButton, { Icon } from "@smui/icon-button";
   import "@smui/icon-button/bare.css";
 
-  let isPlaying = false;
+  let isPlaying = false,
+    isFastForwarding = false;
 </script>
 
 <div class="wrapper">
   <div class="controls">
-    <IconButton class="material-icons">skip_previous</IconButton
-    >
-    <IconButton class="material-icons">fast_forward</IconButton
-    >
+    <IconButton class="material-icons">skip_previous</IconButton>
+    <IconButton toggle bind:pressed={isFastForwarding}>
+      <Icon class="material-icons" off>fast_forward</Icon>
+      <Icon class="material-icons" on style="color: #6200EE">fast_forward</Icon>
+    </IconButton>
 
     <IconButton toggle bind:pressed={isPlaying}>
       <Icon class="material-icons" off>play_arrow</Icon>
       <Icon class="material-icons" on>pause</Icon>
     </IconButton>
-    
+
     <IconButton class="material-icons" disabled={isPlaying}
       >keyboard_arrow_right</IconButton
     >
-    <IconButton class="material-icons">skip_next</IconButton
-    >
+    <IconButton class="material-icons">skip_next</IconButton>
   </div>
 </div>
 

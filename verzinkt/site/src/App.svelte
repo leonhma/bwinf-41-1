@@ -1,4 +1,5 @@
 <script lang="ts">
+  import "wasm-tracing-allocator";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
 
@@ -8,7 +9,7 @@
   import Controls from "./components/Controls.svelte";
   import Settings from "./components/Settings.svelte";
 
-  import { simulationProps, simulationData } from "./index";
+  import { simulationProps, simulationData, HSVtoRGB } from "./index";
   import CircularProgress from "@smui/circular-progress";
   import Snackbar, { Label, SnackbarComponentDev } from "@smui/snackbar";
 
@@ -32,8 +33,8 @@
     // asynchronously load the wasm module
     await Promise.all([
       (async function () {
-        await import("../pkg").then((mod) => {
-          Simulation = mod.Simulation;
+        await import("../pkg").then((module) => {
+          Simulation = module.Simulation;
           finishedLoading = true;
           loadingSnackbar.close();
           if (showsLoadingIndicator) {
@@ -53,7 +54,7 @@
       }),
     ]);
 
-    let simulation: any;
+    let simulation: import("../pkg").Simulation;
 
     const props = get(simulationProps);
 
@@ -68,10 +69,29 @@
           props.v_left_end,
           props.v_right_start,
           props.v_right_end,
-          [255, 255, 255, 255],
+          [255, 255, 255],
+          1.0,
           data.canvas
         );
-        console.log('created new instance of simulation')
+        console.log("created new instance of simulation");
+        simulationProps.subscribe((props) => {
+          simulation.updateSimulationProps(
+            props.v_up_start,
+            props.v_up_end,
+            props.v_down_start,
+            props.v_down_end,
+            props.v_left_start,
+            props.v_left_end,
+            props.v_right_start,
+            props.v_right_end,
+            [
+              ...Object.values(
+                HSVtoRGB(props.color.h, props.color.s, props.color.v)
+              ),
+            ],
+            props.color.a
+          );
+        });
       }
     });
   });
@@ -81,7 +101,7 @@
   <Canvas />
   <Sidebar>
     <Settings />
-    <Buttons bind:secureContextSnackbar />
+    <Buttons />
     <Controls />
   </Sidebar>
   <Snackbar bind:this={loadingSnackbar} timeoutMs={-1}>

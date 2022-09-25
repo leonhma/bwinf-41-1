@@ -10,9 +10,9 @@ module.exports = (env) => {
   const prod = mode === "production";
 
   return {
-    entry: "./src/index.ts",
+    entry: path.resolve(__dirname, "./src/index.ts"),
     mode,
-    devtool: prod ? false : "source-map",
+    devtool: prod ? false : "eval-source-map",
     resolve: {
       extensions: [".ts", ".svelte", ".mjs", ".js"],
     },
@@ -65,7 +65,6 @@ module.exports = (env) => {
     output: {
       path: path.resolve(__dirname, "./dist"),
       clean: true,
-      filename: "bundle.js",
     },
     plugins: [
       new HTMLWebpackPlugin({ publicPath: "/" }),
@@ -78,9 +77,11 @@ module.exports = (env) => {
         forceMode: mode,
       }),
     ],
+    ignoreWarnings: [
+      /size limit [^]*module\.wasm/ // ignore size warnings for wasm files
+    ],
     devServer: {
       hot: true,
-      server: "https",
       watchFiles: [
         "src",
         "cargo.toml",

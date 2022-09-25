@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { Color, ColorInput } from "color-picker-svelte";
-
-  let color = new Color("#79818f");
+  import { ColorInput } from "color-picker-svelte";
+  import {simulationProps} from "../index";
 </script>
 
 <div class="color">
-  <ColorInput bind:color title="Farbe" showAlphaSlider/>
+  <ColorInput bind:color={$simulationProps.color} title={$simulationProps.color.toHexString()} showAlphaSlider/>
 </div>
 
 <style>

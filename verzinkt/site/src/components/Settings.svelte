@@ -7,10 +7,6 @@
   const v_min = 0.1,
     v_max = 10,
     v_step = 0.1;
-
-  const d_t_min = 0,
-    d_t_max = 200,
-    d_t_step = 2;
 </script>
 
 <div class="settings">
@@ -62,17 +58,6 @@
     style="margin: 0"
   />
 
-  <span class="name">d_t (ms)</span>
-  <Slider
-    discrete
-    range
-    min={d_t_min}
-    max={d_t_max}
-    step={d_t_step}
-    bind:start={$simulationProps.d_t_start}
-    bind:end={$simulationProps.d_t_end}
-    style="margin: 0"
-  />
   <Color />
 </div>
 

@@ -6,8 +6,10 @@
     const canvas = document.getElementById(
       "simulationCanvas"
     ) as HTMLCanvasElement;
+    const format = (await import(/* webpackPrefetch: true */ 'date-fns/format')).default
     const writable = await showSaveFilePicker({
       excludeAcceptAllOption: true,
+      suggestedName: `simulation-${format(new Date(), "yyyy-MM-dd-HH-mm-ss")}.png`,
       types: [
         {
           description: "Image",
@@ -16,7 +18,12 @@
           },
         },
       ],
-    }).then((handle) => handle.createWritable());
+    })
+      .then((handle) => handle.createWritable())
+      .catch(() => {
+        return;
+      });
+    if (!writable) return;
     canvas.toBlob((blob) => {
       writable.write(blob);
       writable.close();
