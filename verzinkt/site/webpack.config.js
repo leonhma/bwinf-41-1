@@ -64,6 +64,7 @@ module.exports = (env) => {
     },
     output: {
       path: path.resolve(__dirname, "./dist"),
+      publicPath: prod? "gL5WY3fPt751WfPpougU/" : "/",
       clean: true,
     },
     plugins: [
@@ -78,7 +79,7 @@ module.exports = (env) => {
       }),
     ],
     ignoreWarnings: [
-      /size limit [^]*module\.wasm/ // ignore size warnings for wasm files
+      /size limit [^]*module\.wasm/, // ignore size warnings for wasm files
     ],
     devServer: {
       hot: true,
