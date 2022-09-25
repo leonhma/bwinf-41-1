@@ -69,14 +69,13 @@ module.exports = (env) => {
       clean: true,
     },
     plugins: [
-      new HTMLWebpackPlugin({ publicPath: "/" }),
+      new HTMLWebpackPlugin({ publicPath: prod ? "/gL5WY3fPt751WfPpougU/" : "/" }),
       new MiniCssExtractPlugin(),
       new CopyPlugin({
         patterns: ["public/"],
       }),
       new WasmPackPlugin({
         crateDirectory: path.resolve(__dirname, "."),
-        forceMode: mode,
       }),
     ],
     ignoreWarnings: [
