@@ -65,6 +65,7 @@ module.exports = (env) => {
     output: {
       path: path.resolve(__dirname, "./dist"),
       publicPath: prod ? "/gL5WY3fPt751WfPpougU/" : "/",
+      chunkFilename: "[id].chunk.js",
       clean: true,
     },
     plugins: [
@@ -83,6 +84,10 @@ module.exports = (env) => {
     ],
     devServer: {
       hot: true,
+      client: {
+        logging: "none",
+        progress: true,
+      },
       watchFiles: [
         "src",
         "cargo.toml",
