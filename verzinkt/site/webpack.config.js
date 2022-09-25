@@ -64,12 +64,12 @@ module.exports = (env) => {
     },
     output: {
       path: path.resolve(__dirname, "./dist"),
-      publicPath: prod ? "/gL5WY3fPt751WfPpougU/" : "/",
+      publicPath: prod ? "/bwinf-41-1/gL5WY3fPt751WfPpougU/" : "/",
       chunkFilename: "[id].chunk.js",
       clean: true,
     },
     plugins: [
-      new HTMLWebpackPlugin({ publicPath: prod ? "/gL5WY3fPt751WfPpougU/" : "/" }),
+      new HTMLWebpackPlugin({ publicPath: prod ? "/bwinf-41-1/gL5WY3fPt751WfPpougU/" : "/" }),
       new MiniCssExtractPlugin(),
       new CopyPlugin({
         patterns: ["public/"],
