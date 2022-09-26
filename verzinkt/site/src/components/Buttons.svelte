@@ -1,12 +1,13 @@
 <script lang="ts">
   import Button, { Icon, Label } from "@smui/button";
   import "@smui/button/bare.css";
+  import(/* webpackPrefetch: true*/ 'date-fns/format')
 
   async function saveImage() {
     const canvas = document.getElementById(
       "simulationCanvas"
     ) as HTMLCanvasElement;
-    const format = (await import(/* webpackPrefetch: true */ 'date-fns/format')).default
+    const format = (await import('date-fns/format')).default
     const writable = await showSaveFilePicker({
       excludeAcceptAllOption: true,
       suggestedName: `simulation-${format(new Date(), "yyyy-MM-dd-HH-mm-ss")}.png`,

@@ -33,7 +33,7 @@
     // asynchronously load the wasm module
     await Promise.all([
       (async function () {
-        await import(/* webpackPreload: true */ "../pkg").then((module) => {
+        await import("../pkg").then((module) => {
           Simulation = module.Simulation;
           finishedLoading = true;
           loadingSnackbar.close();
@@ -110,11 +110,11 @@
         style="height: 32px; width: 32px; margin-left: 12px"
         indeterminate
       />
-      <Label>Runtime wird heruntergeladen</Label>
+      <Label>WASM wird heruntergeladen</Label>
     </div>
   </Snackbar>
   <Snackbar bind:this={loadingFinishedSnackbar}>
-    <Label>Runtime wurde heruntergeladen</Label>
+    <Label>WASM wurde heruntergeladen</Label>
   </Snackbar>
   <Snackbar bind:this={secureContextSnackbar}>
     <Label>Bitte nutze einen sicheren Kontext (https)</Label>

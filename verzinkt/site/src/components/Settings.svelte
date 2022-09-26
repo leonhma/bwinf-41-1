@@ -63,7 +63,7 @@
 
 <style>
   .settings {
-    margin: 0 2.4em;
+    padding: 0 2.4em;
     padding-top: 1em;
     flex-grow: 3;
 
