@@ -8,9 +8,7 @@ Die Idee zur Lösung ist, den Zeitpunkt der Aufgabe des Auftrags und dessen Daue
 
 ## Verbesserungen
 
-Wie die Simulation zeigt ist auch die zweite Methode nicht optimal. Zwar wird die durchschnittlich Dauer der Aufträge gekürzt, aber oft steigt auch die maximale Wartezeit. Das liegt daran, dass kurze Aufträge den Langen vorgezogen werden, und es so passieren kann, dass längere Aufträge durch die wiederholte Aufgabe von kürzeren Aufträgen immer wieder in der Warteschlange nach hinten verschoben werden. So wird die Kundenzufriedenheit und die Verbindlichkeit der Prognosen zur Auftragsdauer verschlechtert. Um dieses Geschehnis zu berücksichtigen, wird zusätzlich zur maximalen- und durchschnittlichen Wartezeit auch die prozentuale Anzahl der Aufträge, die hinter kürzere Aufträge verschoben wurden gezählt. Der Kehrwert dieser Metrik kann auch als 'Fairness' oder 'Verbindlichkeit der Zeitprognosen' betrachtet werden.
-
-
+Wie die Simulation zeigt ist auch die zweite Methode nicht optimal. Zwar wird die durchschnittliche Dauer der Aufträge gekürzt, meist steigt aber auch die maximale Wartezeit. Das liegt daran, dass kurze Aufträge den Langen vorgezogen werden, und es so passieren kann, dass längere Aufträge durch die wiederholte Aufgabe von kürzeren Aufträgen immer wieder in der Warteschlange nach hinten verschoben werden. So wird die Kundenzufriedenheit und die Verbindlichkeit der Prognosen zur Auftragsdauer verschlechtert. Um dieses Geschehnis zu berücksichtigen, wird zusätzlich zur maximalen- und durchschnittlichen Wartezeit auch die prozentuale Anzahl der Aufträge, die hinter kürzere Aufträge verschoben wurden gezählt. Der Kehrwert dieser Metrik kann auch als 'Fairness' oder 'Verbindlichkeit der Zeitprognosen' betrachtet werden.
 
 ## Umsetzung
 

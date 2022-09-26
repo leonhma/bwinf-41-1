@@ -27,7 +27,8 @@ def process_by_submit(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     for submit, duration in queue:
         if submit < current_submit:
             current_fairness_violations += 1
-        current_submit = submit
+        else:
+          current_submit = submit
         wait = max(0, done - submit) + duration
         done = max(done, submit)+duration
 
@@ -58,7 +59,8 @@ def process_by_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
             duration, submit = p.get(block=False, timeout=0)
             if submit < current_submit:
                 current_fairness_violations += 1
-            current_submit = submit
+            else:
+              current_submit = submit
             wait = max(0, done - submit) + duration
             done = done+duration
 
