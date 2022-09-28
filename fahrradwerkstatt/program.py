@@ -12,7 +12,7 @@ def r_path(path_: str) -> str:
     )
 
 
-def process_by_submit(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
+def by_submit(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     queue.sort(key=lambda x: x[0])
     done = 0
 
@@ -21,14 +21,7 @@ def process_by_submit(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     avg_wait = 0
     n_avg_wait = 0
 
-    current_submit = 0
-    current_fairness_violations = 0
-
     for submit, duration in queue:
-        if submit < current_submit:
-            current_fairness_violations += 1
-        else:
-          current_submit = submit
         wait = max(0, done - submit) + duration
         done = max(done, submit)+duration
 
@@ -36,10 +29,10 @@ def process_by_submit(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
         avg_wait = (n_avg_wait * avg_wait + wait) / (n_avg_wait + 1)
         n_avg_wait += 1
 
-    return max_wait, avg_wait, current_fairness_violations/len(queue)*100
+    return max_wait, avg_wait
 
 
-def process_by_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
+def by_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     p = PriorityQueue()
     done = 0
 
@@ -48,19 +41,11 @@ def process_by_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     avg_wait = 0
     n_avg_wait = 0
 
-    current_submit = 0
-    current_fairness_violations = 0
-
     for i, (submit, duration) in enumerate(queue):
         done = max(done, submit)
-
         p.put((duration, submit))
         while not p.empty() and (i + 1 == len(queue) or done < queue[i + 1][0]):
             duration, submit = p.get(block=False, timeout=0)
-            if submit < current_submit:
-                current_fairness_violations += 1
-            else:
-              current_submit = submit
             wait = max(0, done - submit) + duration
             done = done+duration
 
@@ -68,7 +53,37 @@ def process_by_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
             avg_wait = (n_avg_wait * avg_wait + wait) / (n_avg_wait + 1)
             n_avg_wait += 1
 
-    return max_wait, avg_wait, current_fairness_violations/len(queue)*100
+    return max_wait, avg_wait
+
+
+def by_duration_resumable(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
+    p = PriorityQueue()
+
+    max_wait = 0
+
+    avg_wait = 0
+    n_avg_wait = 0
+
+    done = 0
+
+    for i, (submit, duration) in enumerate(queue):
+        done = max(done, submit)
+        p.put((duration, submit))
+        next_submit = queue[i + 1][0] if i + 1 < len(queue) else 9999999999999999
+        while not p.empty() and done < next_submit:
+            duration, submit = p.get(block=False, timeout=0)
+            if duration > next_submit - done:
+                p.put((duration - (next_submit - done), submit))
+                done = next_submit
+                break
+            done = done+duration
+            wait = done - submit
+
+            max_wait = max(max_wait, wait)
+            avg_wait = (n_avg_wait * avg_wait + wait) / (n_avg_wait + 1)
+            n_avg_wait += 1
+
+    return max_wait, avg_wait
 
 
 # hauptprogramm
@@ -89,12 +104,12 @@ def main():
 
     queue.sort()
 
-    processors = [process_by_submit, process_by_duration]
+    processors = [by_submit, by_duration, by_duration_resumable]
 
     data = {processor.__name__: processor(queue) for processor in processors}
 
     df = DataFrame(data, index=['Maximale Wartezeit (min)',
-                   'Durchschnittliche Wartezeit (min)', 'Vorgezogene Aufträge (%)'])
+                   'Durchschnittliche Wartezeit (min)'])
 
     print(f'Aufträge simuliert in {format(time()-start_time, ".3f")}ms:')
     print()
