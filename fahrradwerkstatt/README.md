@@ -16,31 +16,17 @@ Nun werden die Aufträge mit den gegebenen Methoden bearbeitet. Hier gibt zusät
 
 Letztendlich werden die Ergebnisse formatiert ausgegeben.
 
-### Big O
-
-Die Laufzeit des Programms ergibt sich als die Summe der einzelnen Verarbeitungsmethoden. Die Laufzeit der einzelnen Methoden muss also einzeln betrachtet werden:
-
-#### `by_submit`
-
-Die Laufzeit der Methode `process_by_submit` ist `O(n)`, da die Liste der Aufträge einmal durchlaufen wird.
-
-#### `by_duration`
-
-Die Laufzeit der Methode `process_by_duration` ist schwerer zu ermitteln. Zuerst wird die Liste der Aufträge durchlaufen (`O(n)`). Dann wird der jetzige Eintrag in die PriorityQueue hinzugefügt. Die PriorityQueue ist eine Binomial-Heap-Struktur, die in der Regel `O(log n)` Zeit benötigt, um ein Element hinzuzufügen. Solange die PriorityQueue nicht leer ist, werden solange anstehende Anträge aus der PriorityQueue bearbeitet, bis der nächste Auftrag eingeht. Da es maximal `n` Einträge gibt, wird durchschnittlich `n/n`, also `1` mal iteriert. So ergibt sich hier eine Laufzeit von `O(n log n)`.
-
-Insgesamt ergibt sich eine vereinfachte Laufzeit von `O(n log n)`
-
 ## Verbesserungen
 
-Wie die Simulation zeigt, wird durch die Auswahl des Auftrags mit der kürzesten Dauer die Durchschnittszeit der Bearbeitung der Aufträge deutlich reduziert. Dadurch verschlechtert sich aber gleichzeitig die maximale Wartezeit, da längere Aufträge immer weiter 'nach hinten' in der Warteschlange geschoben werden. Man muss also zwischen diesen beiden Metriken einen Kompromiss finden.
+Wie die Simulation zeigt, wird durch die Auswahl des Auftrags mit der kürzesten Dauer die Durchschnittszeit der Bearbeitung der Aufträge deutlich reduziert. Dadurch verschlechtert sich aber gleichzeitig die maximale Wartezeit, da längere Aufträge immer weiter 'nach hinten' in der Warteschlange geschoben werden. Es werden also Kunden mit längeren Aufträgen unfair behandelt, da ihr Termin immer weiter verschoben wird.
 
-Die maximale Wartezeit wird mit der ersten Methode schon sehr gut optimiert.
-
-Um die durchschnittliche Bearbeitungszeit zu minimieren, gibt es eine dritte Methode:
+Achtet man jedoch nur auf die durchschnittliche Bearbeitungszeit, lässt sich eine noch bessere Bearbeitungsmethode für `G/G/1` Warteschlangen finden:
 
 `by_duration_resumable`
 
 Es wird angenommen, dass jeder Auftrag niedergelegt und ein kürzerer Auftrag aufgenommen werden kann. So kann immer der kürzeste Auftrag bearbeitet werden, und nicht nur wenn ein neuer Auftrag ausgewählt wird. Dies geht mit einer deutlichen Verbesserung der durchschnittlichen Wartezeit einher.
+
+Dies ist die optimale Art eine `G/G/1` Warteschlange zu bearbeiten, da zu jedem Zeitpunkt der kürzeste Auftrag bearbeitet wird und die Zeit zur Fertigstellung immer minimal ist. Diese Verbesserung ist auch deutlich in der Simulation zu erkennen.
 
 ## Beispiele
 

@@ -13,6 +13,7 @@ def r_path(path_: str) -> str:
 
 
 # die wörter-liste
+# ((lineno, word), ...)
 book: Tuple[Tuple[int, str]]
 
 with open(r_path('beispieldaten/Alice_im_Wunderland.txt'), 'r') as f:
@@ -62,7 +63,6 @@ def main():
         print()
         for result, line_ref in results:
             print(f'> {result} ({line_ref})')
-
 
 # programmschleife
 print('Lieblingsbuchzitatfinder')

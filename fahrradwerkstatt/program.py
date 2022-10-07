@@ -5,6 +5,7 @@ from typing import List, Tuple
 from pandas import DataFrame
 
 
+# relativer pfad zu speicherplatz der aktuellen datei
 def r_path(path_: str) -> str:
     return path.join(
         path.dirname(path.abspath(__file__)),
@@ -12,6 +13,7 @@ def r_path(path_: str) -> str:
     )
 
 
+# bearbeitungsmethode: nach einreichungszeit sortiert
 def by_submit(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     queue.sort(key=lambda x: x[0])
     done = 0
@@ -32,6 +34,7 @@ def by_submit(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     return max_wait, avg_wait
 
 
+# bearbeitungsmethode: nach bearbeitungszeit sortiert
 def by_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     p = PriorityQueue()
     done = 0
@@ -56,6 +59,7 @@ def by_duration(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     return max_wait, avg_wait
 
 
+# bearbeitungsmethode: nach bearbeitungszeit sortiert mit wiederaufnehmbarkeit
 def by_duration_resumable(queue: List[Tuple[int, int]]) -> Tuple[int, int]:
     p = PriorityQueue()
 
