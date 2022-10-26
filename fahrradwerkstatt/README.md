@@ -10,23 +10,23 @@ Die Idee zur Lösung ist, den Zeitpunkt der Aufgabe des Auftrags und dessen Daue
 
 Das Programm ist in Python umgesetzt und mit einer Umgebung ab der Version `3.6` ausführbar. Das Programm befindet sich in der Datei `program.py` in diesem Ordner.
 
-Zuerst werden die Aufträge aus dem Beispiel in eine Liste geladen. Die Aufträge werden dabei als Tuple gespeichert. Das erste Element ist der Zeitpunkt der Aufgabe des Auftrags, das zweite Element ist die Dauer des Auftrags. Zur Sicherheit wird die Liste noch einmal nach Eingangszeitpunkt sortiert.
+Zuerst werden die Aufträge aus dem Beispiel in eine Liste geladen. Die Aufträge werden dabei als Tuple gespeichert.
 
-Nun werden die Aufträge mit den gegebenen Methoden bearbeitet. Hier gibt zusätzlich zu den vorgeschlagenen Methoden `by_submit` (Die Aufträge werden in der Reihenfolge ihrer Aufgabe bearbeitet) und `by_duration` (Unter den verfügbaren Aufträgen wird immer der Kürzeste ausgewählt). Die Ergebnisse werden in einem DataFrame aus der Bibliothek `pandas` gespeichert, um eine formatierte Ausgabe zu erleichtern.
+Nun werden die Aufträge mit den gegebenen Methoden bearbeitet. Hier gibt zusätzlich zu den vorgeschlagenen Methoden `by_submit` (Die Aufträge werden in der Reihenfolge ihrer Aufgabe bearbeitet) und `by_duration` (Unter den verfügbaren Aufträgen wird immer der Kürzeste ausgewählt) auch noch `by_duration_resumable`, die im Folgenden beschrieben wird. Die Ergebnisse werden in einem DataFrame aus der Bibliothek `pandas` gespeichert, um eine formatierte Ausgabe zu erleichtern.
 
 Letztendlich werden die Ergebnisse formatiert ausgegeben.
 
 ## Verbesserungen
 
-Wie die Simulation zeigt, wird durch die Auswahl des Auftrags mit der kürzesten Dauer die Durchschnittszeit der Bearbeitung der Aufträge deutlich reduziert. Dadurch verschlechtert sich aber gleichzeitig die maximale Wartezeit, da längere Aufträge immer weiter 'nach hinten' in der Warteschlange geschoben werden. Es werden also Kunden mit längeren Aufträgen unfair behandelt, da ihr Termin immer weiter verschoben wird.
+Wie die Simulation zeigt, wird durch die Auswahl des Auftrags mit der kürzesten Dauer die Durchschnittszeit der Bearbeitung der Aufträge deutlich reduziert. Dadurch verschlechtert sich aber gleichzeitig die maximale Wartezeit, da längere Aufträge immer weiter 'nach hinten' in der Warteschlange geschoben werden. Kunden mit längeren Aufträgen werden daher unzufriedener sein, da ihre Aufträge zugunsten von kürzeren Aufträgen immer wieder "unfairerweise" weiter nach Hinten in der Warteschlange verschoben werden.
 
-Achtet man jedoch nur auf die durchschnittliche Bearbeitungszeit, lässt sich eine noch bessere Bearbeitungsmethode für `G/G/1` Warteschlangen finden:
+Achtet man jedoch nur auf die durchschnittliche Bearbeitungszeit, lässt sich eine noch bessere Bearbeitungsmethode für Warteschlangen des Typs `G/G/1` finden:
 
 `by_duration_resumable`
 
-Es wird angenommen, dass jeder Auftrag niedergelegt und ein kürzerer Auftrag aufgenommen werden kann. So kann immer der kürzeste Auftrag bearbeitet werden, und nicht nur wenn ein neuer Auftrag ausgewählt wird. Dies geht mit einer deutlichen Verbesserung der durchschnittlichen Wartezeit einher.
+Es wird angenommen, dass jeder Auftrag niedergelegt, ein kürzerer Auftrag aufgenommen werden, und nach Fertigstellung der vorherige Auftrag wieder aufgenommen werden kann. So kann immer der kürzeste Auftrag bearbeitet werden, und nicht nur wenn ein neuer Auftrag ausgewählt wird. Dies geht mit einer deutlichen Verbesserung der durchschnittlichen Wartezeit einher.
 
-Dies ist die optimale Art eine `G/G/1` Warteschlange zu bearbeiten, da zu jedem Zeitpunkt der kürzeste Auftrag bearbeitet wird und die Zeit zur Fertigstellung immer minimal ist. Diese Verbesserung ist auch deutlich in der Simulation zu erkennen.
+Dies ist die optimale Art eine `G/G/1` Warteschlange zu bearbeiten, da zu jedem Zeitpunkt der kürzeste Auftrag bearbeitet wird und die Zeit bis zur Fertigstellung eines Auftrags immer minimal ist. Diese Verbesserung ist auch deutlich in der Simulation zu erkennen.
 
 ## Beispiele
 

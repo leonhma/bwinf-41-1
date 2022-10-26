@@ -24,7 +24,7 @@ Praktisch ist dieser Maximalwert jedoch kaum zu erreichen, (vor allem nicht bei 
 
 ## Beispiele
 
-Hier wird das Programm auf die fünf Beispiele von der Website angewendet:
+Hier wird das Programm auf die sechs Beispiele von der Website angewendet:
 
 `stoerung0.txt`
 
