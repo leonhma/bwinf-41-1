@@ -2,7 +2,7 @@ from itertools import chain, permutations, product
 from os import path
 from functools import reduce
 from operator import mul
-from typing import Iterator, List, Mapping, Tuple
+from typing import Any, Iterator, List, Mapping, Tuple
 
 
 def r_path(path_: str) -> str:
@@ -45,14 +45,14 @@ def load_boards(path_: str) -> List[Tuple[Tuple[int]]]:
 def boards_match(board1: Tuple[Tuple[int]],
                  board2: Tuple[Tuple[int]],
                  xmapping: List[int],
-                 ymapping: List[int]) -> bool or Mapping[int, int]:
-    """check if two boards are identical excluding swapped numbers. return number mapping if they are"""
+                 ymapping: List[int]) -> Mapping[int, int]:
+    """check if two boards are identical except for swapped numbers. return number mapping if they are"""
     number_mapping = {0: 0}
     for x in range(9):
         for y in range(9):
             if board1[xmapping[x]][ymapping[y]] in number_mapping:
                 if number_mapping[board1[xmapping[x]][ymapping[y]]] != board2[x][y]:
-                    return False
+                    return
             else:
                 number_mapping[board1[xmapping[x]][ymapping[y]]] = board2[x][y]
     else:
@@ -60,6 +60,7 @@ def boards_match(board1: Tuple[Tuple[int]],
 
 
 def rotations(board: Tuple[Tuple[int]]) -> Iterator[Tuple[int, Tuple[Tuple[int]]]]:
+    """iterate through all rotations of a board"""
     current = board
     yield (0, current)
     for i in range(1, 4):
@@ -67,7 +68,7 @@ def rotations(board: Tuple[Tuple[int]]) -> Iterator[Tuple[int, Tuple[Tuple[int]]
         yield (i, current)
 
 
-def boards_similar(board1: Tuple[Tuple[int]], board2: Tuple[Tuple[int]]):
+def boards_similar(board1: Tuple[Tuple[int]], board2: Tuple[Tuple[int]]) -> Mapping[str, Any]:
     """check if two boards are similar"""
     board2hash = hash(board2)
 
@@ -110,28 +111,38 @@ def fprint_solution(solution: Mapping):
     """print human-readable solution"""
     if solution['xdivmapping'] != (0, 1, 2):
         print(
-            f"- Vertauschung der Spaltenblöcke: {', '.join(f'{i+1} -> {t+1}' for i, t in enumerate(solution['xdivmapping']) if i != t)}")
+            f"- Vertauschung der Zeilenblöcke: {', '.join(f'{i+1} -> {t+1}' for i, t in enumerate(solution['xdivmapping']) if i != t)}")
     if solution['ydivmapping'] != (0, 1, 2):
         print(
-            f"- Vertauschung der Zeilenblöcke: {', '.join(f'{i+1} -> {t+1}' for i, t in enumerate(solution['ydivmapping']) if i != t)}")
+            f"- Vertauschung der Spaltenblöcke: {', '.join(f'{i+1} -> {t+1}' for i, t in enumerate(solution['ydivmapping']) if i != t)}")
     if solution['rotation'] != 0:
-        print(f"- Drehung um {solution['rotation']*90}°")
+        print(f"- Drehung im Uhrzeigersinn um {solution['rotation']*90}°")
 
     if solution['xcolmappings'] != ((0, 1, 2), (0, 1, 2), (0, 1, 2)):
         print(
-            f"- Vertauschen der Spalten: {', '.join(f'{m*3+1+i} -> {m*3+1+t}' for m, mapping in enumerate(solution['xcolmappings']) for i, t in enumerate(mapping) if i != t)}")
+            f"- Vertauschen der Zeilen: {', '.join(f'{m*3+1+i} -> {m*3+1+t}' for m, mapping in enumerate(solution['xcolmappings']) for i, t in enumerate(mapping) if i != t)}")
     if solution['yrowmappings'] != ((0, 1, 2), (0, 1, 2), (0, 1, 2)):
         print(
             f"- Vertauschen der Spalten: {', '.join(f'{m*3+1+i} -> {m*3+1+t}' for m, mapping in enumerate(solution['yrowmappings']) for i, t in enumerate(mapping) if i != t)}")
-    if solution['number_mapping'] != {i: i for i in range(8)}:
+    if any(i != t for i, t in solution['number_mapping'].items()):
         print(
-            f"- Vertauschen der Zahlen: {', '.join(f'{i} -> {t}' for i, t in solution['number_mapping'].items() if i != t)}")
+            f"- Umbenennung der Zahlen: {', '.join(f'{i} -> {t}' for i, t in solution['number_mapping'].items() if i != t)}")
 
 
+# loop
 while True:
-    number = input('Nummer des Beispiels eingeben [0; 4]: ')
-    board1, board2 = load_boards(f'beispieldaten/sudoku{number}.txt')
-    if solution := boards_similar(board1, board2):
-        fprint_solution(solution)
-    else:
-        print('Die beiden Sudokus sind nicht ähnlich.')
+    try:
+        number = input('Nummer des Beispiels eingeben [0; 4]: ')
+        print()
+        board1, board2 = load_boards(f'beispieldaten/sudoku{number}.txt')
+        if solution := boards_similar(board1, board2):
+            print('Die beiden Sudokus sind ähnlich!')
+            fprint_solution(solution)
+        else:
+            print('Die beiden Sudokus sind nicht ähnlich.')
+    except Exception as e:
+        print(f'Fehler: {e}')
+    except KeyboardInterrupt:
+        print()
+        exit()
+    print()
