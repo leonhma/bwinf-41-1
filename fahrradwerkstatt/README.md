@@ -14,7 +14,7 @@ Zuerst werden die Aufträge aus dem Beispiel in eine Liste geladen. Die Aufträg
 
 Nun werden die Aufträge mit den gegebenen Methoden bearbeitet. Hier gibt zusätzlich zu den vorgeschlagenen Methoden `by_submit` (Die Aufträge werden in der Reihenfolge ihrer Aufgabe bearbeitet) und `by_duration` (Unter den verfügbaren Aufträgen wird immer der Kürzeste ausgewählt) auch noch `by_duration_resumable`, die im Folgenden beschrieben wird. Die Ergebnisse werden in einem DataFrame aus der Bibliothek `pandas` gespeichert, um eine formatierte Ausgabe zu erleichtern.
 
-Letztendlich werden die Ergebnisse formatiert ausgegeben.
+Zum Schluss werden die Ergebnisse formatiert ausgegeben.
 
 ## Verbesserungen
 

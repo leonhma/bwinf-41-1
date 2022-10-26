@@ -10,7 +10,7 @@ Die Idee zur Lösung basiert auf dem Brute-Force Lösungsweg. Da dieser mit $3!*
 
 Das Programm ist in Python umgesetzt und mit einer Umgebung ab der Version `3.8` ausführbar. Das Programm befindet sich in der Datei `program.py` in diesem Ordner.
 
-Zuerst werden die beiden Sudokubretter in Matrizen geladen. Nun werden sie gehasht. Dabei wird jeder Block (3x3 Felder) zu einem einzigen Integer reduziert. Da sich die Werte der Zahlen ändern können, dürfen diese nicht zum generieren dieses Wertes verwendet werden. Es wird für jede Reihe die Anzahl der Zahlen in dieser Reihe gezählt. Um den Wert 0 zu vermeiden, wird hier 1 addiert. Da sich die Reihenfolge der Reihen arbiträr ändern kann, werden mit Blick auf das Kommutativgesetzt die einzelnen Werte multipliziert. Dieses Verfahren wird auch auf die Spalten des Blockes angewendet und die beiden Ergebnisse werden um den finalen Hash zu erhalten addiert.
+Zuerst werden die beiden Sudokubretter in Matrizen geladen. Nun werden sie gehasht. Dabei wird jeder Block (3x3 Felder) zu einem einzigen Integer reduziert. Da sich die Werte der Zahlen ändern können, dürfen diese nicht zum Generieren dieses Wertes verwendet werden. Es wird für jede Reihe die Anzahl der Zahlen in dieser Reihe gezählt. Um den Wert 0 zu vermeiden, wird hier 1 addiert. Da sich die Reihenfolge der Reihen arbiträr ändern kann, werden mit Blick auf das Kommutativgesetz die einzelnen Werte multipliziert. Dieses Verfahren wird auch auf die Spalten des Blockes angewendet und die beiden Ergebnisse werden, um den finalen Hash zu erhalten addiert.
 
 ![sudokopie-hash.gif](../static/sudokopie-hash.gif)
 <i style="position:absolute;bottom:-20px;left: 5px">Demonstration des hashing-Algorithmus</i>
@@ -20,9 +20,9 @@ Zuerst werden die beiden Sudokubretter in Matrizen geladen. Nun werden sie gehas
 Nun wird zuerst die Kombination aus Spalten- und Zeilenblockverschiebung und Rotation überprüft ($3!*3!*4=144$ Möglichkeiten).
 Wenn der Hash des ersten Bretts, auf das diese Veränderungen angewendet wurden dem Hash des zweiten Bretts gleich ist, wird diese Lösungsmöglichkeit genauer untersucht. Sollten die Hashes nicht übereinstimmen, ist sicher, dass dies nicht die Lösung ist. Durch das Überspringen von offensichtlich falschen Kombinationen, wird ein Großteil der Arbeit übersprungen (~142 von 144 Kombinationen werden hier übersprungen).
 
-Wird nun eine Lösung weiter untersucht, wird durch alle Kombinationen von Spalten- und Zeilenverschiebungen iteriert ($3!^3*3!^3$). Für jede Kombination wird wiederum überprüft, ob sich beide Bretter - ausgenommen vom Umbenennen der Zahlen - übereinstimmen. Dazu wird in einem dictionary die Umbenennung von Zahlen gespeichert (`{1: 2, 9: 1, ...}`). Es wird durch die Matrizen iteriert. Sollte eine Zahl an dem betrachteten Index keine Zuordnung im dictionary haben, wird diese hinzugefügt. Wenn schon eine Zuordnung existiert, muss die Zahl im zweiten Brett der Zuordnung der Zahl vom ersten Brett übereinstimmen. So wird während dem Überprüfen der Lösung auch gleich die erforderte Umordnung der Zahlen erzeugt.
+Wird jedoch eine Lösung weiter untersucht, wird durch alle Kombinationen von Spalten- und Zeilenverschiebungen iteriert ($3!^3*3!^3$). Für jede Kombination wird wiederum überprüft, ob sich beide Bretter - ausgenommen vom Umbenennen der Zahlen - übereinstimmen. Dazu wird in einem dictionary die Umbenennung von Zahlen gespeichert (`{1: 2, 9: 1, ...}`). Es wird durch die Matrizen iteriert. Sollte eine Zahl an dem betrachteten Index keine Zuordnung im dictionary haben, wird diese hinzugefügt. Wenn schon eine Zuordnung existiert, muss die Zahl im zweiten Brett der Zuordnung der Zahl vom ersten Brett übereinstimmen. So wird während dem Überprüfen der Lösung auch gleich die erforderte Umordnung der Zahlen erzeugt.
 
-Letztendlich werden die Ergebnisse formatiert ausgegeben.
+Zum Schluss werden die Ergebnisse formatiert ausgegeben.
 
 ## Beispiele
 

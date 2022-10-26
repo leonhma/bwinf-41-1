@@ -12,9 +12,9 @@ Das Programm ist in Python umgesetzt und mit einer Umgebung ab der Version `3.6`
 
 Zuerst wird das Buch mithilfe einer RegEx (`(\\w+?)(?:\\W|$)`) in eine Liste geladen und mithilfe der `str.lower()` Methode normalisiert. In dieser Liste wird zusammen mit den Wörtern auch ihre Zeilennummer im Buch gespeichert.
 
-Nun wird in einer verschachtelten `for`-Schleife über die Indizes im Buch (über die Wörter) iteriert. Dies stellt den linken Pointer dar. Der rechte Pointer wird nun auf den Wert des Linken gesetzt. In einer weiteren Schleife wird über die Wörter im zu findenden Satz iteriert. Wenn das nächste Wort mit mit dem nächsten im Buch übereinstimmt, das am rechten Pointer zu finden ist, wird dieser um eins inkrementiert. Stimmt das Wort nicht überein, wird durch `break` die innere Schleife gebrochen und der linke Pointer wird weiter vergrößert. Durch das `for ... else` Konstrukt kann geprüft werden, ob es eine volle Übereinstimmung der Textstelle und dem zu findenden Satz gibt. Ist das der Fall, wird sie der Ergebnisliste hinzugefügt.
+Jetzt wird in einer verschachtelten `for`-Schleife über die Indizes im Buch (über die Wörter) iteriert. Dies stellt den linken Pointer dar. Der rechte Pointer wird nun auf den Wert des Linken gesetzt. In einer weiteren Schleife wird über die Wörter im zu findenden Satz iteriert. Wenn das nächste Wort mit dem nächsten im Buch übereinstimmt, das am rechten Pointer zu finden ist, wird dieser um eins inkrementiert. Stimmt das Wort nicht überein, wird durch `break` die innere Schleife gebrochen und der linke Pointer wird weiter vergrößert. Durch das `for ... else` Konstrukt kann geprüft werden, ob es eine volle Übereinstimmung der Textstelle und dem zu findenden Satz gibt. Ist das der Fall, wird sie der Ergebnisliste hinzugefügt.
 
-Letztendlich werden die Ergebnisse formatiert ausgegeben.
+Zum Schluss werden die Ergebnisse formatiert ausgegeben.
 
 ### Big O
 
