@@ -4,7 +4,7 @@
 
 ## Lösungsidee
 
-Die Idee zur Lösung basiert auf dem Brute-Force Lösungsweg. Da dieser mit $3!*3!*4*3!^3*3!^3*10!=2.4*10^{13}$ Kombinationsmöglichkeiten aber nicht in akzeptabler Zeit zu berechnen ist, wird sich einem Trick bedient: Die einzelnen Blöcke (3x3 Felder, 9 Blöcke) werden "gehasht" - also für jeden Block wird eine (nicht immer kollisionsfreie) Zahl berechnet - wodurch schnell geprüft werden kann, ob sich dieser Block an der richtigen Position befindet. Das ist möglich, da Spalten und Zeilen immer nur innerhalb eines Blockes verschoben werden dürfen.
+Die Idee zur Lösung basiert auf dem Brute-Force Lösungsweg. Da dieser mit `3!*3!*4*3!^3*3!^3*10!=24.000.000.000.000` Kombinationsmöglichkeiten aber nicht in akzeptabler Zeit zu berechnen ist, wird sich einem Trick bedient: Die einzelnen Blöcke (3x3 Felder, 9 Blöcke) werden "gehasht" - also für jeden Block wird eine (nicht immer kollisionsfreie) Zahl berechnet - wodurch schnell geprüft werden kann, ob sich dieser Block an der richtigen Position befindet. Das ist möglich, da Spalten und Zeilen immer nur innerhalb eines Blockes verschoben werden dürfen.
 
 ## Umsetzung
 
@@ -13,14 +13,11 @@ Das Programm ist in Python umgesetzt und mit einer Umgebung ab der Version `3.8`
 Zuerst werden die beiden Sudokubretter in Matrizen geladen. Nun werden sie gehasht. Dabei wird jeder Block (3x3 Felder) zu einem einzigen Integer reduziert. Da sich die Werte der Zahlen ändern können, dürfen diese nicht zum Generieren dieses Wertes verwendet werden. Es wird für jede Reihe die Anzahl der Zahlen in dieser Reihe gezählt. Um den Wert 0 zu vermeiden, wird hier 1 addiert. Da sich die Reihenfolge der Reihen arbiträr ändern kann, werden mit Blick auf das Kommutativgesetz die einzelnen Werte multipliziert. Dieses Verfahren wird auch auf die Spalten des Blockes angewendet und die beiden Ergebnisse werden, um den finalen Hash zu erhalten addiert.
 
 ![sudokopie-hash.gif](../static/sudokopie-hash.gif)
-<i style="position:absolute;bottom:-20px;left: 5px">Demonstration des hashing-Algorithmus</i>
 
-<br>
-
-Nun wird zuerst die Kombination aus Spalten- und Zeilenblockverschiebung und Rotation überprüft ($3!*3!*4=144$ Möglichkeiten).
+Nun wird zuerst die Kombination aus Spalten- und Zeilenblockverschiebung und Rotation überprüft (`3!*3!*4=144` Möglichkeiten).
 Wenn der Hash des ersten Bretts, auf das diese Veränderungen angewendet wurden dem Hash des zweiten Bretts gleich ist, wird diese Lösungsmöglichkeit genauer untersucht. Sollten die Hashes nicht übereinstimmen, ist sicher, dass dies nicht die Lösung ist. Durch das Überspringen von offensichtlich falschen Kombinationen, wird ein Großteil der Arbeit übersprungen (~142 von 144 Kombinationen werden hier übersprungen).
 
-Wird jedoch eine Lösung weiter untersucht, wird durch alle Kombinationen von Spalten- und Zeilenverschiebungen iteriert ($3!^3*3!^3$). Für jede Kombination wird wiederum überprüft, ob sich beide Bretter - ausgenommen vom Umbenennen der Zahlen - übereinstimmen. Dazu wird in einem dictionary die Umbenennung von Zahlen gespeichert (`{1: 2, 9: 1, ...}`). Es wird durch die Matrizen iteriert. Sollte eine Zahl an dem betrachteten Index keine Zuordnung im dictionary haben, wird diese hinzugefügt. Wenn schon eine Zuordnung existiert, muss die Zahl im zweiten Brett der Zuordnung der Zahl vom ersten Brett übereinstimmen. So wird während dem Überprüfen der Lösung auch gleich die erforderte Umordnung der Zahlen erzeugt.
+Wird jedoch eine Lösung weiter untersucht, wird durch alle Kombinationen von Spalten- und Zeilenverschiebungen iteriert (`3!^3*3!^3`). Für jede Kombination wird wiederum überprüft, ob sich beide Bretter - ausgenommen vom Umbenennen der Zahlen - übereinstimmen. Dazu wird in einem dictionary die Umbenennung von Zahlen gespeichert (`{1: 2, 9: 1, ...}`). Es wird durch die Matrizen iteriert. Sollte eine Zahl an dem betrachteten Index keine Zuordnung im dictionary haben, wird diese hinzugefügt. Wenn schon eine Zuordnung existiert, muss die Zahl im zweiten Brett der Zuordnung der Zahl vom ersten Brett übereinstimmen. So wird während dem Überprüfen der Lösung auch gleich die erforderte Umordnung der Zahlen erzeugt.
 
 Zum Schluss werden die Ergebnisse formatiert ausgegeben.
 
