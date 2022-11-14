@@ -99,7 +99,6 @@ def main():
 
     start_time = time()  # variable für die zeitmessung
 
-    # laden des graphen mit umgedrehten pfeilen um memoization zu erleichtern
     queue: List[Tuple[int, int]] = []
     with open(r_path(f'beispieldaten/fahrradwerkstatt{bsp_nr}.txt'), 'r') as f:
         for a, b in map(lambda x: tuple(map(int, x.split())),
