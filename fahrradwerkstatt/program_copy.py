@@ -4,7 +4,7 @@ from math import floor
 from queue import PriorityQueue
 from time import time
 from os import path
-from typing import Any, Callable, List, Mapping, Tuple
+from typing import Any, Callable, List, Tuple
 from pandas import DataFrame
 from contextlib import suppress
 
@@ -38,12 +38,10 @@ class TOD:
         self.end_time = end_time
 
     def __add__(self, minutes: int) -> 'TOD':
-        days = floor(minutes / 8*60)
-        min_ = minutes % 8*60
-        if self.time % (24*60) + min_ < self.end_time:
-            self.time += days*24*60 + min_
+        if (self.time % (24*60) + minutes % (8*60)) < self.end_time:
+            self.time += minutes
         else:
-            self.time += (days+1)*24*60+min_-(self.end_time-self.time % (24*60))
+            self.time += minutes + ((24*60-work_end)+work_start)
         return self
 
     def set(self, time: int):
@@ -56,20 +54,19 @@ class TOD:
         else:
             self.time = time
 
-
     def __int__(self):
         return self.time
 
 
 class OrdersQueue:
     time: TOD
-    orders: List[Tuple[int, int]]  # Tuples of orders from the future (submit, time)
-    processing: List[List[int, int]]
+    orders: List[Tuple[int]]  # Tuples of orders from the future (submit, time)
+    processing: List[List[int]]
     priority: Callable = lambda x: x[0]  # sorting function for processing orders
     on_done: Callable[[int, int], None]
 
     def __init__(self, orders: List[Tuple[int, int]], start_time: int, end_time: int):
-        self.orders = deepcopy(orders).sort(key=lambda x: x[0])  # sort by submit
+        self.orders = sorted(deepcopy(orders), key=lambda x: x[0])  # sort by submit
         self.processing = []
         self.time = TOD(start_time, end_time)
 
@@ -89,7 +86,7 @@ class OrdersQueue:
         with suppress(IndexError):
             while self.orders[0][0] <= int(self.time):
                 self.processing.append(list(self.orders.pop(0)))
-        
+
         with suppress(IndexError):
             if len(self.processing) == 0:
                 self.processing.append(self.orders.pop(0))
@@ -99,12 +96,12 @@ class OrdersQueue:
 
     def _time_until_next_event(self) -> Tuple[int, EventType]:
         # assumed: work_start <= self.time <= work_end
-        ttno = self.processing[0][0] - int(self.time)  # time-to-new-order
-        tteow = self.work_end - (int(self.time) % (24*60))  # time-to-end-of-work
+        ttno = self.orders[0][0] - int(self.time) if len(self.orders) else 9999999999  # time-to-new-order
+        tteow = work_end - (int(self.time) % (24*60))  # time-to-end-of-work
 
-        return min[(ttno, EventType.NEW_ORDER),
+        return min([(ttno, EventType.NEW_ORDER),
                    (tteow, EventType.WORK_END),
-                   (self.processing[0][1], EventType.CURRENT_DONE)]
+                   (self.processing[0][1], EventType.CURRENT_DONE)])
 
     def work(self, time: int):
         # work (assumes currently working hours)
@@ -112,14 +109,18 @@ class OrdersQueue:
         while time_worked < time:
             self._update_processing()
             t_, _ = self._time_until_next_event()
-            t = max(t_, time-time_worked)
+            t = min(t_, time-time_worked)
             time_worked += t
             self.time += t
             self.processing[0][1] -= t
+            if self.processing[0][1] < 0:
+                print(f'{self.processing[0][1]=}')
+                exit()
             if self.processing[0][1] == 0:
                 self.on_done(self.processing[0][0], self.time.time)
                 self.processing.pop(0)
-                if not self.processing:
+                if not self.processing and not self.orders:
+                    return
 
     def work_until_next_order_submit(self):
         self._update_processing()
@@ -130,18 +131,22 @@ class OrdersQueue:
             if e == EventType.NEW_ORDER:
                 return
             self._update_processing()
+            if not self.orders and not self.processing:
+                return
 
 
 # bearbeitungsmethode: nach einreichungszeit sortiert
 def by_submit(orders: List[Tuple[int, int]]) -> Tuple[int, int]:
+    global max_wait, avg_wait, n_avg_wait
     q = OrdersQueue(orders, work_start, work_end)
 
     max_wait = 0
 
     avg_wait = 0
     n_avg_wait = 0
-    
+
     def order_done(submit: int, finish: int):
+        global max_wait, avg_wait, n_avg_wait
         wait = finish-submit
         max_wait = max(max_wait, wait)
         avg_wait = (n_avg_wait * avg_wait + wait) / (n_avg_wait + 1)
@@ -150,17 +155,14 @@ def by_submit(orders: List[Tuple[int, int]]) -> Tuple[int, int]:
     q.on_done(order_done)
     q.set_priority(lambda x: x[0])
 
-    
-
     while q:
-
-        
+        q.work(24*60)
 
     return max_wait, avg_wait
 
 
 # bearbeitungsmethode: nach bearbeitungszeit sortiert
-def by_duration(queue: List[List[int, int]]) -> Tuple[int, int]:
+def by_duration(queue: List[List[int]]) -> Tuple[int, int]:
     p = PriorityQueue()
     done = 0
 
@@ -185,7 +187,7 @@ def by_duration(queue: List[List[int, int]]) -> Tuple[int, int]:
 
 
 # bearbeitungsmethode: nach bearbeitungszeit sortiert mit wiederaufnehmbarkeit
-def by_duration_resumable(queue: List[List[int, int]]) -> Tuple[int, int]:
+def by_duration_resumable(queue: List[List[int]]) -> Tuple[int, int]:
     p = PriorityQueue()
 
     max_wait = 0
@@ -224,11 +226,11 @@ def main():
 
     start_time = time()  # variable für die zeitmessung
 
-    queue: List[List[int, int]] = []  # [[submit, length]]
+    queue: List[List[int]] = []  # [[submit, length]]
     with open(r_path(f'beispieldaten/fahrradwerkstatt{bsp_nr}.txt'), 'r') as f:
         for a, b in map(lambda x: tuple(map(int, x.split())),
                         filter(lambda x: x != '', f.read().split('\n'))):
-            queue.append((a, b))
+            queue.append([a, b])
 
     queue.sort()
 
@@ -249,10 +251,4 @@ print('Fahrradwerkstatt')
 print('(Drücke ^C um das Programm zu beenden)')
 
 while True:
-    try:
-        main()
-    except Exception as e:
-        print(e)
-    except KeyboardInterrupt:
-        print('\n')
-        exit()
+    main()
